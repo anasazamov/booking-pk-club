@@ -30,5 +30,5 @@ async def login(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
         )
-    token = create_access_token(sub=str(user.id))
+    token = create_access_token(sub=str(user.phone_number))
     return {"access_token": token, "token_type": "bearer"}

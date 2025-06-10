@@ -12,24 +12,24 @@ class DatabaseHelper:
             class_=AsyncSession
         )
 
-    async def get_session(self) -> AsyncGenerator[AsyncSession]:
+    async def get_session(self) -> AsyncGenerator[AsyncSession, None]:
         try:
             async with self.session_factory() as session:
                 yield session
         finally:
             await session.close()
 
-    async def get_scoped_session(self) -> AsyncGenerator[AsyncSession]:
+    async def get_scoped_session(self) -> AsyncGenerator[AsyncSession, None]:
         async with async_scoped_session(self.session_factory, scopefunc=asyncio.current_task) as session:
             yield session
 
-    def session_dependency(self) -> AsyncGenerator[AsyncSession]:
+    def session_dependency(self) -> AsyncGenerator[AsyncSession, None]:
         """
         Dependency to be used in FastAPI routes for getting a database session.
         """
         return self.get_session()
     
-    def scoped_session_dependency(self) -> AsyncGenerator[AsyncSession]:
+    def scoped_session_dependency(self) -> AsyncGenerator[AsyncSession, None]:
         """
         Dependency to be used in FastAPI routes for getting a scoped database session.
         """
