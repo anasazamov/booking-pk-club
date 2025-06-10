@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime as da
 
 class UserCreate(BaseModel):
     first_name: str
@@ -14,8 +15,8 @@ class UserRead(BaseModel):
     is_active: bool
     role: str
     balance: float | None = 0.0
-    created_at: str
-    updated_at: str | None = None
+    created_at: da
+    updated_at: da | None = None
     is_verified: bool = False
 
     class Config:

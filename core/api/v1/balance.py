@@ -36,7 +36,7 @@ async def topup_user_balance(
     Top-up user's balance. Idempotent via `Idempotency-Key` header.
     Only admin and owner can perform.
     """
-    if current.role not in (RoleEnum.admin, RoleEnum.owner):
+    if current.role not in (RoleEnum.ADMIN, RoleEnum.OWNER):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not enough permissions"

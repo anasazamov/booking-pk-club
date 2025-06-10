@@ -18,10 +18,8 @@ async def users_list(
     db: AsyncSession = Depends(get_db),
     current=Depends(get_current_user),
 ):
-    """
-    Получить список пользователей с пагинацией (только для админа и владельца).
-    """
-    if current.role not in (RoleEnum.admin, RoleEnum.owner):
+  
+    if current.role not in (RoleEnum.ADMIN, RoleEnum.OWNER):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
     return await list_users(db, skip=skip, limit=limit)
 
@@ -32,7 +30,7 @@ async def get_user(
     current=Depends(get_current_user),
 ):
 
-    if current.role not in (RoleEnum.admin, RoleEnum.owner):
+    if current.role not in (RoleEnum.ADMIN, RoleEnum.OWNER):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
     user = await get_user_by_id(db, user_id)
     if not user:
@@ -47,7 +45,7 @@ async def modify_user(
     current=Depends(get_current_user),
 ):
 
-    if current.role not in (RoleEnum.admin, RoleEnum.owner):
+    if current.role not in (RoleEnum.ADMIN, RoleEnum.OWNER):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
     user = await update_user(db, user_id, data)
     if not user:

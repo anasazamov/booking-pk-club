@@ -44,7 +44,7 @@ async def post_branch(
     current=Depends(get_current_user)
 ):
 
-    if current.role not in (RoleEnum.admin, RoleEnum.owner):
+    if current.role not in (RoleEnum.ADMIN, RoleEnum.OWNER):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
     return await create_branch(db, data)
 
@@ -73,7 +73,7 @@ async def put_branch(
     current=Depends(get_current_user)
 ):
 
-    if current.role not in (RoleEnum.admin, RoleEnum.owner):
+    if current.role not in (RoleEnum.ADMIN, RoleEnum.OWNER):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
     branch = await update_branch(db, branch_id, data)
     if not branch:
@@ -90,7 +90,7 @@ async def del_branch(
     current=Depends(get_current_user)
 ):
 
-    if current.role not in (RoleEnum.admin, RoleEnum.owner):
+    if current.role not in (RoleEnum.ADMIN, RoleEnum.OWNER):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
     await delete_branch(db, branch_id)
 
@@ -120,7 +120,7 @@ async def post_zone(
     current=Depends(get_current_user)
 ):
 
-    if current.role not in (RoleEnum.admin, RoleEnum.owner):
+    if current.role not in (RoleEnum.ADMIN, RoleEnum.OWNER):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
     return await create_zone(db, data)
 
@@ -149,7 +149,7 @@ async def put_zone(
     current=Depends(get_current_user)
 ):
 
-    if current.role not in (RoleEnum.admin, RoleEnum.owner):
+    if current.role not in (RoleEnum.ADMIN, RoleEnum.OWNER):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
     zone = await update_zone(db, zone_id, data)
     if not zone:
@@ -166,7 +166,7 @@ async def del_zone(
     current=Depends(get_current_user)
 ):
 
-    if current.role not in (RoleEnum.admin, RoleEnum.owner):
+    if current.role not in (RoleEnum.ADMIN, RoleEnum.OWNER):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
     await delete_zone(db, zone_id)
 
@@ -196,7 +196,7 @@ async def post_place(
     current=Depends(get_current_user)
 ):
 
-    if current.role not in (RoleEnum.admin, RoleEnum.owner):
+    if current.role not in (RoleEnum.ADMIN, RoleEnum.OWNER):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
     return await create_place(db, data)
 
@@ -225,7 +225,7 @@ async def put_place(
     current=Depends(get_current_user)
 ):
   
-    if current.role not in (RoleEnum.admin, RoleEnum.owner):
+    if current.role not in (RoleEnum.ADMIN, RoleEnum.OWNER):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
     place = await update_place(db, place_id, data)
     if not place:
@@ -242,6 +242,6 @@ async def del_place(
     current=Depends(get_current_user)
 ):
    
-    if current.role not in (RoleEnum.admin, RoleEnum.owner):
+    if current.role not in (RoleEnum.ADMIN, RoleEnum.OWNER):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
     await delete_place(db, place_id)

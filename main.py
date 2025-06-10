@@ -1,5 +1,14 @@
 from fastapi import FastAPI
-from core.api.v1 import auth, refresh, users, branches, verify
+from core.api.v1 import (
+    auth, 
+    refresh, 
+    users, 
+    branches, 
+    verify,
+    balance,
+    booking,
+    transactions
+    )
 from core.config import settings
 
 app = FastAPI(
@@ -13,6 +22,9 @@ app.include_router(refresh.router)
 app.include_router(users.router)
 app.include_router(branches.router)
 app.include_router(verify.router)
+app.include_router(balance.router)
+app.include_router(booking.router)
+app.include_router(transactions.router)
 
 
 @app.get("/", tags=["root"])

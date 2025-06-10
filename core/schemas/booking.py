@@ -1,7 +1,8 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from datetime import datetime
 from enum import Enum
 from decimal import Decimal
+from core.schemas.location import PlaceRead
 
 class BookingStatus(str, Enum):
     pending = "pending"
@@ -23,9 +24,9 @@ class BookingRead(BookingBase):
     status: BookingStatus
     created_at: datetime
     updated_at: datetime
+    place_id: int
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class BookingUpdate(BaseModel):
     status: BookingStatus | None = None

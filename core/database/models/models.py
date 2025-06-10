@@ -98,12 +98,14 @@ class Booking(Base):
 
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     place_id = Column(Integer, ForeignKey("places.id", ondelete="CASCADE"), nullable=False)
-    start_datetime = Column(DateTime, nullable=False, default=func.now())
-    end_datetime = Column(DateTime, nullable=False)
+    start_datetime = Column(DateTime(timezone=True), nullable=False)
+    end_datetime   = Column(DateTime(timezone=True), nullable=False)
+    created_at     = Column(DateTime(timezone=True), server_default=func.now(), default=datetime.now)
+    updated_at     = Column(DateTime(timezone=True), onupdate=func.now(), default=datetime.now)
     status = Column(SAEnum(BookingStatus), default=BookingStatus.PENDING, nullable=False)
     amount = Column(Numeric(10, 2), nullable=False)
-    created_at = Column(DateTime, default=func.now())
-    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+    # created_at = Column(DateTime, default=func.now())
+    # updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
     # business rule: ensure no overlapping bookings at application level
     __table_args__ = (
@@ -114,6 +116,7 @@ class Booking(Base):
     place = relationship("Place", back_populates="bookings")
     balance_transactions = relationship("BalanceTransaction", back_populates="booking")
     icafe_booking = relationship("ICafeBooking", back_populates="booking", uselist=False)
+    idempotency_key = Column(String(100), nullable=False, unique=True)
 
 
 class TransactionType(str, Enum):
@@ -121,6 +124,7 @@ class TransactionType(str, Enum):
     FREEZE = "freeze"
     RELEASE = "release"
     PAYMENT = "payment"
+    CANCELLED = 'cancelled'
 
 
 class BalanceTransaction(Base):
@@ -130,7 +134,7 @@ class BalanceTransaction(Base):
     booking_id = Column(Integer, ForeignKey("bookings.id", ondelete="SET NULL"), nullable=True)
     type = Column(SAEnum(TransactionType), nullable=False)
     amount = Column(Numeric(10, 2), nullable=False)
-    created_at = Column(DateTime, default=func.now())
+    created_at = Column(DateTime, default=datetime.now, server_default=func.now())
     idempotency_key = Column(String(100), nullable=False, unique=True)
 
     user = relationship("User", back_populates="balance_transactions")

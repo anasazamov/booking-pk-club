@@ -30,6 +30,7 @@ async def post_booking(
     """
     Create a new booking. Idempotent via `Idempotency-Key`.
     """
+    
     booking = await create_booking(db, current.id, data, idempotency_key)
     return booking
 
@@ -47,7 +48,7 @@ async def get_bookings(
     List bookings. Regular users see own, admin/owner see all.
     """
     user_id = None
-    if current.role not in (RoleEnum.admin, RoleEnum.owner):
+    if current.role not in (RoleEnum.ADMIN, RoleEnum.OWNER):
         user_id = current.id
     bookings = await list_bookings(db, user_id, skip=skip, limit=limit)
     return bookings
@@ -65,7 +66,7 @@ async def patch_booking(
     """
     Update a booking (admin/owner only).
     """
-    if current.role not in (RoleEnum.admin, RoleEnum.owner):
+    if current.role not in (RoleEnum.ADMIN, RoleEnum.OWNER):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not enough permissions"
@@ -85,9 +86,9 @@ async def del_booking(
     current = Depends(get_current_user)
 ):
     """
-    Delete a booking (admin/owner only).
+    Delete a booking (ADMIN/OWNER only).
     """
-    if current.role not in (RoleEnum.admin, RoleEnum.owner):
+    if current.role not in (RoleEnum.ADMIN, RoleEnum.OWNER):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not enough permissions"

@@ -20,18 +20,24 @@ async def topup_balance(
     amount: Decimal,
     idempotency_key: str
 ) -> User | None:
-
-    existing = await get_transaction_by_key(db, idempotency_key)
+    # 1. Idempotency: oldin bunday key bilan transaction bormi?
+    res = await db.execute(
+        select(BalanceTransaction)
+        .where(BalanceTransaction.idempotency_key == idempotency_key)
+    )
+    existing = res.scalar_one_or_none()
     user = await db.get(User, user_id)
+
     if not user:
         return None
     if existing:
         await db.refresh(user)
         return user
 
-
+    # 2. Balansni oshirish
     user.balance = (user.balance or Decimal("0.00")) + amount
 
+    # 3. Yozib qo‘yish
     txn = BalanceTransaction(
         user_id=user_id,
         booking_id=None,
@@ -40,6 +46,7 @@ async def topup_balance(
         idempotency_key=idempotency_key
     )
     db.add(txn)
+
     await db.commit()
     await db.refresh(user)
     return user
