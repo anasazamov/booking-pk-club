@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    env_file: .env
+    ports:
+      - '8010:8010'
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./:/app
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: booking
+      POSTGRES_PASSWORD: booking
+      POSTGRES_DB: booking
+    ports:
+      - '5532:5532'
+  redis:
+    image: redis:7
+    ports:
+      - '6479:6479'
+  celery:
+    build: .
+    command: celery -A core.tasks.cleanup worker --loglevel=info
+    env_file: .env
+    depends_on:
+      - redis
+      - db

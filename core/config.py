@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = Field(..., env="SECRET_KEY")
     ALGORITHM: str = Field("HS256", env="JWT_ALGORITHM")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(60 * 24 * 7, env="ACCESS_TOKEN_EXPIRE_MINUTES")
+    REFRESH_TOKEN_EXPIRE_DAYS: int = Field(120* 24 * 7, env="REFRESH_TOKEN_EXPIRE_DAYS")
 
     # OTP
     OTP_EXPIRE_MINUTES: int = Field(5, env="OTP_EXPIRE_MINUTES")
@@ -33,8 +34,16 @@ class Settings(BaseSettings):
     ICAFE_API_KEY: str = Field(..., env="ICAFE_API_KEY")
     ICAFE_API_SECRET: str = Field(..., env="ICAFE_API_SECRET")
 
-    # Internationalization
+    
     LANGUAGES: list[str] = Field(["ru", "uz", "en"], env="LANGUAGES")
+    
+    # ESKIZ integration
+    SMS_AUTH_URL: AnyUrl = Field("https://notify.eskiz.uz/api/auth/login", env="SMS_AUTH_URL")
+    SMS_SEND_URL: AnyUrl = Field("https://notify.eskiz.uz/api/message/sms/send", env="SMS_SEND_URL")
+    SMS_USERNAME: str = Field(..., env="SMS_USERNAME")
+    SMS_PASSWORD: str = Field(..., env="SMS_PASSWORD")
+    SMS_SENDER: str = Field(..., env="SMS_SENDER")
+
 
     class Config:
         env_file = ".env"

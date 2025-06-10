@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from passlib.context import CryptContext
 from core.database.models import User
 from core.schemas.user import UserCreate
+from core.database.models.models import RoleEnum
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

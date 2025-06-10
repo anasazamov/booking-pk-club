@@ -43,6 +43,9 @@ class User(Base):
     balance_transactions = relationship("BalanceTransaction", back_populates="user")
     icafe_account = relationship("ICafeAccount", back_populates="user", uselist=False)
 
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+
 
 class OTP(Base):
     __tablename__ = "otps"
@@ -128,6 +131,7 @@ class BalanceTransaction(Base):
     type = Column(SAEnum(TransactionType), nullable=False)
     amount = Column(Numeric(10, 2), nullable=False)
     created_at = Column(DateTime, default=func.now())
+    idempotency_key = Column(String(100), nullable=False, unique=True)
 
     user = relationship("User", back_populates="balance_transactions")
     booking = relationship("Booking", back_populates="balance_transactions")
